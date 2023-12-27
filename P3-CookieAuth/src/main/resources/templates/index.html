@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Home</title>
+    <link rel="icon" href="data:,"/>
+    <link rel="stylesheet" th:href="@{/css/index.css}" type="text/css"/>
+</head>
+<body>
+    <form class="form" th:action="@{/auth/logout}">
+        <h1>Welcome &apos;<th:block th:text="${username}"/>&apos;</h1>
+        <h2>You are on your personal area</h2>
+        <input class="button crystal"
+               type="submit" formmethod="post"
+               value="Log out"/>
+    </form>
+</body>
+</html>

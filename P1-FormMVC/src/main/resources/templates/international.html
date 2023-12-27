@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script type="text/javascript">
+        // Cuando la página ha terminado de cargarse
+        $(document).ready(function () {
+            // Listener que "está pendiente" de cambios
+            // en el campo de ID "locales" <select>
+            $("#locales").change(function () {
+                // Recupera el atributo value del <option>
+                // que se ha seleccionado (a la que se ha cambiado)
+                const selectedOption = $('#locales').val();
+                // Comprueba que se haya seleccionado una <option> no vacía
+                if (selectedOption !== '')
+                    window.location.replace('international?lang=' + selectedOption);
+            });
+        });
+    </script>
+</head>
+<body>
+    <form>
+        <legend>
+            <h1 th:text="#{lang.greetings}"></h1>
+        </legend>
+        <label for="locales">
+            <span th:text="#{lang.change}"></span>:
+        </label>
+        <select id="locales">
+            <option value=""></option>
+            <option value="en" th:text="#{lang.en}"></option>
+            <option value="es" th:text="#{lang.es}"></option>
+            <option value="fr" th:text="#{lang.fr}"></option>
+            <option value="de" th:text="#{lang.de}"></option>
+        </select>
+    </form>
+</body>
+</html>

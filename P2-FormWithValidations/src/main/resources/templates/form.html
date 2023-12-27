@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="#{form.title}"></title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script type="text/javascript" th:src="@{/js/functions.js}"></script>
+    <link rel="stylesheet" id="styles" type="text/css" th:href="@{/css/styles.css}"/>
+<!--/*    <link rel="stylesheet" type="text/css" href="../static/css/styles.css"/> */-->
+    <link rel="icon" href="data:,"/>
+
+    <!--/* Para lo de las banderas */-->
+    <!--/*
+    <link rel="stylesheet" href="https://cdn.tutorialjinni.com/intl-tel-input/17.0.8/css/intlTelInput.css"/>
+    <script src="https://cdn.tutorialjinni.com/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
+    */-->
+</head>
+<body id="cuerpo" th:object="${params}">
+
+    <th:block th:insert="~{fragments/navInfo.html}"/>
+
+    <th:block th:insert="~{fragments/formInfo.html}"/>
+
+</body>
+</html>

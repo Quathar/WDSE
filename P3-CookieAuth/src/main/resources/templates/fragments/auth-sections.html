@@ -1,0 +1,48 @@
+
+<!-- USERNAME SECTION -->
+<!-- USERNAME SECTION -->
+<!-- USERNAME SECTION -->
+<!--th:object="${usernameDTO}"-->
+<div class="section" th:fragment="username-section" >
+    <label for="username">Username</label>
+    <input class="input crystal"
+           type="text"
+           id="username" name="username"
+           th:value="${username}">
+<!--           th:field="*{username}">-->
+<!--    <div class="error" th:if="${#fields.hasErrors('username')}">-->
+<!--        <div th:each="error : ${#fields.errors('username')}"-->
+<!--             th:text="${error}"></div>-->
+<!--    </div>-->
+    <div class="links">
+        <a class="link" href="#">Forgot your username?</a>
+        <a class="link" href="#">Create an account</a>
+    </div>
+    <input class="input crystal" type="submit" value="Next"
+           th:formaction="@{/auth/username}"
+           formmethod="post"/>
+</div>
+
+<!-- PASSWORD SECTION -->
+<!-- PASSWORD SECTION -->
+<!-- PASSWORD SECTION -->
+<div class="section" th:fragment="password-section" th:object="${loginDTO}">
+    <input type="hidden" th:field="*{user}">
+    <h3 class="header">Welcome  &apos;<th:block th:text="*{user}"/>&apos;</h3>
+    <label for="password">Enter your password</label>
+    <input class="input crystal" type="password"
+           th:id="password" th:name="password"
+           th:value="*{password}">
+    <div class="error" th:if="${#fields.hasErrors('password')}">
+        <div th:each="error : ${#fields.errors('password')}"
+             th:text="${error}"></div>
+    </div>
+    <label>
+        <input type="checkbox" onclick="showPassword('password')"/>
+        Show password
+    </label>
+    <a href="#" th:onclick="recoverPassword()">Forgot your password?</a>
+    <input class="input crystal" type="submit" value="Next"
+           th:formaction="@{/auth/password}"
+           formmethod="post"/>
+</div>

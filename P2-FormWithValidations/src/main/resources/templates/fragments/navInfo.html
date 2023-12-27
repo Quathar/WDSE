@@ -1,0 +1,8 @@
+<div th:object="${httpInfo}">
+    <span class="http" th:text="#{form.request.ip(*{ip})}"></span>
+    <span class="http" th:text="#{form.request.brandVersion(*{brandVersion})}"></span>
+    <span class="http" th:text="#{form.request.oS(*{oS})}"></span>
+    <span class="http" th:text="#{form.request.renderEngine(*{renderEngine})}"></span>
+    <span class="http" th:text="#{form.request.host(*{host})}"></span>
+    <span class="http" th:text="#{form.request.lang(*{lang})}"></span>
+</div>

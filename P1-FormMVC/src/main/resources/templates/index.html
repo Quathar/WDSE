@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title th:text="#{form}"></title>
+    <script type="text/javascript" th:src="@{/js/index.js}"></script><!--/* JavaScript */-->
+    <link rel="stylesheet" type="text/css" th:href="@{/css/index.css}">
+    <link rel="icon" href="data:,"/><!--/* Para que no busque favicon.ico */-->
+</head>
+<body>
+<h1 th:if="${original}" th:text="#{form.original}"></h1>
+<h1 th:unless="${original}" th:text="#{form.repainted}"></h1>
+<h2 th:text="#{form.iterations(${iterations})}"></h2>
+<form action="/form/repainted" method="post">
+    <fieldset>
+        <legend th:text="#{form.legend}"></legend>
+
+        <label for="name"><th:block th:text="#{form.name}"/></label>
+        <input type="text" name="name" id="name" th:value="${name}" class="box"/>
+        <br/>
+
+        <label for="passwd"><th:block th:text="#{form.passwd}"/></label>
+        <input type="password" name="passwd" id="passwd" th:value="${passwd}" class="box"/>
+        <br/>
+
+        <label for="confirmPasswd"><th:block th:text="#{form.confirmPasswd}"/></label>
+        <input type="password" name="confirmPasswd" id="confirmPasswd" th:value="${passwd}" class="box"/>
+        <br/>
+
+        <div></div><!--/* Para correcta colocación en documento CSS */-->
+        <input type="hidden" name="iterations" id="iterations" th:value="${iterations}"/>
+        <input type="button" th:value="#{form.button.showPasswords}" onclick="showPasswords('passwd', 'confirmPasswd')">
+        <br/>
+
+        <label><th:block th:text="#{form.selectedSemaphore}"/></label>
+        <div><!--/* Para correcta colocación en documento CSS */-->
+            <!--/*@thymesVar id="color" type=""*/-->
+            <th:block th:each="color : ${listSemaphore}">
+                <input type="radio" name="selectedSemaphore"
+                       th:value="${color.key}" th:text="${color.value}"
+                       th:checked="${color.key.equals(selectedSemaphore)}"/>
+            </th:block>
+        </div>
+        <br/>
+
+        <div></div><!--/* Para correcta colocación en documento CSS */-->
+        <input type="button" th:value="#{form.button.deselectRadio}" onclick="checkAll('selectedSemaphore', false);">
+        <br/>
+
+        <label for="selectedCountry"><th:block th:text="#{form.selectedCountry}"/></label>
+        <select name="selectedCountry" id="selectedCountry">
+            <option th:each="country : ${listCountries}"
+                    th:value="${country.key}" th:text="${country.value}"
+                    th:selected="${country.key.equals(selectedCountry)}"></option>
+        </select>
+        <br/>
+
+        <div></div><!--/* Para correcta colocación en documento CSS */-->
+        <input type="file" name="document" id="document"/>
+        <br/>
+
+        <label for="selectedMusic"><th:block th:text="#{form.selectedMusic}"/></label>
+        <select name="selectedMusic" id="selectedMusic" multiple="multiple">
+            <!--/*@thymesVar id="music" type=""*/-->
+            <option th:each="music : ${listMusic}"
+                    th:value="${music.key}" th:text="${music.value}"
+                    th:selected="${#lists.contains(selectedMusic, music.key)}">
+            </option>
+        </select>
+        <br/>
+
+        <input type="button" th:value="#{form.button.deselectMusic}" onclick="selectAll('selectedMusic', false);">
+        <input type="button" th:value="#{form.button.selectMusic}" onclick="selectAll('selectedMusic', true);">
+        <br/>
+
+        <label><th:block th:text="#{form.selectedHobbies}"/></label>
+        <div><!--/* Para correcta colocación en documento CSS */-->
+            <!--/*@thymesVar id="hobby" type=""*/-->
+            <th:block th:each="hobby : ${listHobbies}">
+                <input type="checkbox" name="selectedHobbies"
+                       th:value="${hobby.key}" th:text="${hobby.value}"
+                       th:checked="${#lists.contains(selectedHobbies, hobby.key)}"/>
+            </th:block>
+        </div>
+        <br/>
+
+        <input type="button" th:value="#{form.button.deselectHobbies}"
+               onclick="checkAll('selectedHobbies', false);">
+        <input type="button" th:value="#{form.button.selectHobbies}"
+               onclick="checkAll('selectedHobbies', true);">
+        <br/>
+
+        <label for="comments"><th:block th:text="#{form.comments}"/></label>
+        <textarea rows="4" cols="30" name="comments" id="comments" class="box" th:text="${comments}"></textarea>
+        <br/>
+
+        <!--/* Se utiliza el 1º label para correcta colocación en documento CSS */-->
+        <label class="license"><input type="checkbox" name="license" id="license" th:checked="${license}"/></label>
+        <label for="license"><th:block th:text="#{form.license}"/></label>
+        <br/>
+
+        <!--/* Se utiliza el 1º label para correcta colocación en documento CSS */-->
+        <label><input type="image" name="icon" alt="" th:src="@{/img/right_arrows.png}"/></label>
+        <div>imagen.x: <th:block th:text="${iconX}"/> e imagen.y: <th:block th:text="${iconY}"/></div>
+        <br/>
+
+        <input type="button" value="Dejar formulario en blanco" onclick="clearAll()"/>
+        <div></div><!--/* Para correcta colocación en documento CSS */-->
+        <br/>
+
+        <input type="reset" id="restaurar"/>
+        <input type="submit" id="enviar"/>
+        <br/>
+
+        <div class="expand" th:text="${total}"></div>
+    </fieldset>
+</form>
+</body>
+</html>

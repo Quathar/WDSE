@@ -1,0 +1,309 @@
+
+<h1 class="error" th:each="error : ${#fields.detailedErrors()}"
+    th:if="${error.getCode() == 'ApplicationError'}"
+    th:text="${error.getMessage()}"></h1>
+<h1 class="headers" th:if="*{iterations == '1'}" th:text="#{form.title.original}"></h1>
+<h1 class="headers" th:unless="*{iterations == '1'}" th:text="#{form.title.repainted}"></h1>
+<!--<h2>Iteración: <th:block th:text="*{iterations}"/></h2>-->
+<h2 th:text="#{form.title.iterations(*{iterations})}"></h2>
+
+<h2 class="red" th:if="${#fields.hasErrors()}" th:text="#{form.header.alert}"></h2>
+<h2 class="green" th:unless="${#fields.hasErrors()}" th:text="#{form.header.hallelujah}"></h2>
+
+<form action="/form/repaint" enctype="multipart/form-data" method="post">
+    <div id="stylesOptions">
+        <label for="locales">
+            <span th:text="#{lang}"></span>
+            <select th:field="*{language}">
+                <option value=""></option>
+                <option value="es" th:text="#{lang.es}"></option>
+                <option value="en" th:text="#{lang.en}"></option>
+            </select>
+        </label>
+
+        <label for="color">
+            <span th:text="#{color}"></span>
+            <select th:field="*{color}" onchange="changeColor()">
+                <option th:value="@{/css/styles.css}" th:text="#{color.original}"></option>
+                <option th:value="@{/css/yellow.css}" th:text="#{color.yellow}"></option>
+                <option th:value="@{/css/purple.css}" th:text="#{color.purple}"></option>
+            </select>
+        </label>
+    </div>
+
+    <input type="hidden" th:field="*{iterations}">
+    <span class="error" th:if="${#fields.hasErrors('iterations')}" th:errors="*{iterations}"></span>
+
+    <div id="form">
+        <fieldset class="section"> <!--USER DATA-->
+            <legend th:text="#{form.legend.userData}"></legend>
+
+            <label for="name">
+                <span class="asterisk" th:text="#{form.label.name}"></span>
+                <input type="text" th:field="*{name}"
+                       th:placeholder="#{form.placeholder.name}" tabindex="1"/>
+                <ul class="error" th:if="${#fields.hasErrors('name')}">
+                    <!--/*@thymesVar id="error" type="java.lang.String"*/-->
+                    <li th:each="error : ${#fields.errors('name')}" th:text="${error}"></li>
+                </ul>
+                <!--                <span class="error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>-->
+            </label>
+
+            <label for="passwd">
+                <span class="asterisk" th:text="#{form.label.passwd}"></span>
+                <input type="password" th:id="passwd" th:name="passwd" th:value="*{passwd}"
+                       th:placeholder="#{form.placeholder.passwd}" tabindex="2"/>
+                <ul class="error">
+                    <!--/*@thymesVar id="error" type="java.lang.String"*/-->
+                    <li th:each="error : ${#fields.errors('passwd')}" th:text="${error}"></li>
+                    <li th:each="error : ${#fields.globalDetailedErrors()}"
+                        th:if="${error.getCode() == 'PasswdMatch'}"
+                        th:text="${error.getMessage()}"></li>
+                </ul>
+            </label>
+
+            <label for="confirmPasswd">
+                <span class="asterisk" th:text="#{form.label.confirmPasswd}"></span>
+                <input type="password" th:id="confirmPasswd" th:name="confirmPasswd" th:value="*{confirmPasswd}"
+                       th:placeholder="#{form.placeholder.confirmPasswd}" tabindex="3"/>
+                <ul class="error">
+                    <!--/*@thymesVar id="error" type="java.lang.String"*/-->
+                    <li th:each="error : ${#fields.errors('confirmPasswd')}" th:text="${error}"></li>
+                    <li th:each="error : ${#fields.globalDetailedErrors()}"
+                        th:if="${error.getCode() == 'PasswdMatch'}"
+                        th:text="${error.getMessage()}"></li>
+                </ul>
+            </label>
+
+            <input type="button" th:value="#{form.button.passwds}" onclick="showPasswords('passwd', 'confirmPasswd')">
+        </fieldset>
+
+        <fieldset class="section"> <!--PERSONAL DATA-->
+            <legend th:text="#{form.legend.personalData}"></legend>
+
+            <label>
+                <span class="asterisk" th:text="#{form.label.genders}"></span>
+                <th:block th:each="gender : ${listGenders}">
+                    <!--/*@thymesVar id="gender" type="java.lang.String"*/-->
+                    <input type="radio" th:field="*{selectedGender}"
+                           th:value="${gender.key}" th:text="${gender.value}"/>
+                </th:block>
+                <ul class="error" th:if="${#fields.hasErrors('selectedGender')}">
+                    <!--/*@thymesVar id="error" type=""*/-->
+                    <li th:each="error : ${#fields.errors('selectedGender')}" th:text="${error}"></li>
+                </ul>
+            </label>
+
+            <input type="button" th:value="#{form.button.deselect}" onclick="checkAll('selectedGender', false)">
+            <input type="button" th:value="#{form.button.selectFirstRadio}" onclick="checkFirst('selectedGender')">
+
+            <label for="birthdate">
+                <span class="asterisk" th:text="#{form.label.birthdate}"></span>
+                <input type="text" th:field="*{birthdate}"
+                       th:placeholder="#{form.placeholder.birthdate}" tabindex="4"/>
+                <ul class="error">
+                    <!--/*@thymesVar id="error" type=""*/-->
+                    <li th:each="error : ${#fields.errors('birthdate')}" th:text="${error}"></li>
+                    <li th:each="error : ${#fields.globalDetailedErrors()}"
+                        th:if="${error.getCode() == 'AgeMatch'}"
+                        th:text="${error.getMessage()}"></li>
+                    <li th:each="error : ${#fields.globalDetailedErrors()}"
+                        th:if="${error.getCode() == 'MinAge'}"
+                        th:text="${error.getMessage()}"></li>
+                </ul>
+            </label>
+
+            <label for="age">
+                <span class="triangle" th:text="#{form.label.age}"></span>
+                <input type="text" th:field="*{age}"
+                       th:placeholder="#{form.placeholder.age}" tabindex="5"/>
+                <ul class="error">
+                    <!--/*@thymesVar id="error" type="java.lang.String"*/-->
+                    <li th:each="error : ${#fields.errors('age')}" th:text="${error}"></li>
+                    <li th:each="error : ${#fields.globalDetailedErrors()}"
+                        th:if="${error.getCode() == 'AgeMatch'}"
+                        th:text="${error.getMessage()}"></li>
+                </ul>
+            </label>
+
+            <label for="selectedCountry">
+                <span class="asterisk" th:text="#{form.label.selectedCountry}"></span>
+                <select class="asterisk" th:field="*{selectedCountry}">
+                    <!--/*@thymesVar id="country" type=""*/-->
+                    <option th:each="country : ${listCountries}"
+                            th:value="${country.key}" th:text="${country.value.name}"></option>
+                </select>
+            </label>
+        </fieldset>
+
+        <fieldset class="section"> <!--CONTACT DATA-->
+            <legend th:text="#{form.legend.contactData}"></legend>
+
+            <!--/* Prueba para hacer lo de las banderas */-->
+            <!--/* Posible solución, pero no funciona correctamente ya que solo envía el texto
+            <label>
+                <span>FlagTest: </span>
+                <input type="text" th:field="*{phone}"
+                       placeholder="JR este o el de abajo mejor?"/>
+                <script>
+                    var input = document.querySelector("#phone");
+                    window.intlTelInput(input, {
+                        separateDialCode: true,
+                        onlyCountries: ["gb", "es", "fr", "it", "pt"],
+                        initialCountry:"fr",
+                    });
+                </script>
+            <!-/* https://www.tutorialjinni.com/html-select-country-phone-code-list-with-flags.html */->
+            </label>
+            */-->
+
+
+            <!-- Está completamente funcional pero sin banderas -->
+            <label for="mobilePhone">
+                <span th:text="#{form.label.mobilePhone}"></span>
+                <select th:field="*{prefix}">
+                    <!--/*@thymesVar id="code" type=""*/-->
+                    <option th:each="code : ${listCountries}"
+                            th:value="${code.key}"
+                            th:text="${code.value.prefix}">
+                    </option>
+                </select>
+                <input type="text" th:field="*{mobilePhone}"
+                       th:placeholder="#{form.placeholder.mobilePhone}" tabindex="6"/>
+                <ul class="error">
+                    <li th:each="error : ${#fields.errors('mobilePhone')}" th:text="${error}"></li>
+                    <li th:each="error : ${#fields.globalDetailedErrors()}"
+                        th:if="${error.getCode()} == 'CheckDataVoid'"
+                        th:text="${error.getMessage()}"></li>
+                </ul>
+            </label>
+
+            <label for="email">
+                <span class="triangle" th:text="#{form.label.email}"></span>
+                <input type="text" th:field="*{email}"
+                       th:placeholder="#{form.placeholder.email}" tabindex="7"/>
+                <ul class="error">
+                    <!--/*@thymesVar id="error" type="java.lang.String"*/-->
+                    <li th:each="error : ${#fields.errors('email')}" th:text="${error}"></li>
+                    <li th:each="error : ${#fields.globalDetailedErrors()}"
+                        th:if="${error.getCode()} == 'CheckDataVoid'"
+                        th:text="${error.getMessage()}"></li>
+                </ul>
+            </label>
+
+            <label for="url">
+                <span th:text="#{form.label.url}"></span>
+                <input type="text" th:field="*{url}"
+                       th:placeholder="#{form.placeholder.url}" tabindex="8"/>
+                <ul class="error" th:if="${#fields.hasErrors('url')}">
+                    <!--/*@thymesVar id="error" type="java.lang.String"*/-->
+                    <li th:each="error : ${#fields.errors('url')}" th:text="${error}"></li>
+                </ul>
+            </label>
+        </fieldset>
+
+        <fieldset> <!--OTHER INFO-->
+            <legend th:text="#{form.legend.otherInfo}"></legend>
+
+            <label for="document">
+                <span class="triangle" th:text="#{form.label.document}"></span>
+                <input type="file" th:field="*{document}" multiple="multiple"/>
+                <ul class="error" th:if="${#fields.hasErrors('document')}">
+                    <li th:each="error : ${#fields.errors('document')}" th:text="${error}"></li>
+                </ul>
+            </label>
+
+            <label for="selectedMusic">
+                <span th:text="#{form.label.selectedMusic}"></span>
+                <select th:field="*{selectedMusic}" multiple="multiple">
+                    <!--/*@thymesVar id="music" type="java.util.Map"*/-->
+                    <option th:each="music : ${listMusic}"
+                            th:value="${music.key}" th:text="${music.value}"></option>
+                </select>
+                <ul class="error" th:if="${#fields.hasErrors('selectedMusic')}">
+                    <!--/*@thymesVar id="error" type="java.lang.String"*/-->
+                    <li th:each="error : ${#fields.errors('selectedMusic')}" th:text="${error}"></li>
+                </ul>
+            </label>
+
+            <input type="button" th:value="#{form.button.deselect}" onclick="selectAll('selectedMusic', false);">
+            <input type="button" th:value="#{form.button.select}" onclick="selectAll('selectedMusic', true);">
+            <br/>
+
+            <label>
+                <span th:text="#{form.label.selectedHobbies}"></span>
+                <th:block th:each="hobby : ${listHobbies}">
+                    <!--/*@thymesVar id="hobby" type=""*/-->
+                    <input type="checkbox" th:field="*{selectedHobbies}"
+                           th:value="${hobby.key}" th:text="${hobby.value}"/>
+                </th:block>
+                <ul class="error" th:if="${#fields.hasErrors('selectedHobbies')}">
+                    <!--/*@thymesVar id="error" type="java.lang.String"*/-->
+                    <li th:each="error : ${#fields.errors('selectedHobbies')}" th:text="${error}"></li>
+                </ul>
+            </label>
+
+            <input type="button" th:value="#{form.button.deselect}" onclick="checkAll('selectedHobbies', false);">
+            <input type="button" th:value="#{form.button.select}" onclick="checkAll('selectedHobbies', true);">
+            <br/>
+
+            <label for="comments">
+                <span th:text="#{form.label.comments}"></span>
+                <textarea rows="4" cols="30" th:field="*{comments}" tabindex="8"></textarea>
+                <ul class="error" th:if="${#fields.hasErrors('comments')}">
+                    <!--/*@thymesVar id="error" type="java.lang.String"*/-->
+                    <li th:each="error : ${#fields.errors('comments')}" th:text="${error}"></li>
+                </ul>
+            </label>
+        </fieldset>
+
+        <fieldset class="operations"> <!--FORM OPERATIONS-->
+            <legend th:text="#{form.legend.formOperations}"></legend>
+
+            <label for="license">
+                <input type="checkbox" th:field="*{license}" th:checked="*{license}"/>
+                <span th:text="#{form.label.license}"></span>
+                <ul class="error" th:if="${#fields.hasErrors('license')}">
+                    <!--/*@thymesVar id="error" type="java.lang.String"*/-->
+                    <li th:each="error : ${#fields.errors('license')}" th:text="${error}"></li>
+                </ul>
+            </label>
+
+            <input type="button" th:value="#{form.button.clear}" onclick="clearAll()">
+
+            <input type="reset" id="restaurar"
+                   th:attr="onclick=|return confirm('#{form.confirm.reset}')|"/>
+            <input type="submit" id="enviar"
+                   th:attr="onclick=|return confirm('#{form.confirm.submit}')|"/>
+
+            <input type="image" name="icon" alt=""
+                   th:src="@{/img/right_arrow.png}" th:attr="onclick=|return confirm('#{form.confirm.submit}')|"/>
+
+            <!--/*@thymesVar id="icon" type=""*/-->
+            <span th:if="*{icon}" th:text="#{form.label.coordinates(*{icon.x}, *{icon.y})}"></span>
+        </fieldset>
+
+        <fieldset>
+            <legend th:text="#{form.legend.submitInfo}"></legend>
+            <span th:text="#{form.label.counter(*{counter})}"></span><br/>
+            <span th:if="*{iterations}" th:text="#{form.submit.field('iterations')}"></span>
+            <span th:if="*{name}" th:text="#{form.submit.field('name')}"></span>
+            <span th:if="*{passwd}" th:text="#{form.submit.field('passwd')}"></span>
+            <span th:if="*{confirmPasswd}" th:text="#{form.submit.field('confirmPasswd')}"></span>
+            <span th:if="*{selectedGender}" th:text="#{form.submit.field('selectedGender')}"></span>
+            <span th:if="*{birthdate}" th:text="#{form.submit.field('birthdate')}"></span>
+            <span th:if="*{age}" th:text="#{form.submit.field('age')}"></span>
+            <span th:if="*{selectedCountry}" th:text="#{form.submit.field('selectedCountry')}"></span>
+            <span th:if="*{prefix}" th:text="#{form.submit.field('prefix')}"></span>
+            <span th:if="*{mobilePhone}" th:text="#{form.submit.field('mobilePhone')}"></span>
+            <span th:if="*{email}" th:text="#{form.submit.field('email')}"></span>
+            <span th:if="*{url}" th:text="#{form.submit.field('url')}"></span>
+            <span th:if="*{document}" th:text="#{form.submit.field('document')}"></span>
+            <span th:if="*{selectedMusic}" th:text="#{form.submit.field('selectedMusic')}"></span>
+            <span th:if="*{selectedHobbies}" th:text="#{form.submit.field('selectedHobbies')}"></span>
+            <span th:if="*{comments}" th:text="#{form.submit.field('comments')}"></span>
+            <span th:if="*{icon}" th:text="#{form.submit.field('icon.x')}"></span>
+            <span th:if="*{icon}" th:text="#{form.submit.field('icon.y')}"></span>
+        </fieldset>
+    </div>
+</form>
