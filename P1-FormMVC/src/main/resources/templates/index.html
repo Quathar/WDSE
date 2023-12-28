@@ -6,8 +6,8 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title th:text="#{form}"></title>
-    <script type="text/javascript" th:src="@{/js/index.js}"></script><!--/* JavaScript */-->
-    <link rel="stylesheet" type="text/css" th:href="@{/css/index.css}">
+    <script type="text/javascript" th:src="@{/js/script.js}"></script><!--/* JavaScript */-->
+    <link rel="stylesheet" type="text/css" th:href="@{/css/styles.css}">
     <link rel="icon" href="data:,"/><!--/* Para que no busque favicon.ico */-->
 </head>
 <body>
@@ -104,7 +104,7 @@
 
         <!--/* Se utiliza el 1º label para correcta colocación en documento CSS */-->
         <label><input type="image" name="icon" alt="" th:src="@{/img/right_arrows.png}"/></label>
-        <div>imagen.x: <th:block th:text="${iconX}"/> e imagen.y: <th:block th:text="${iconY}"/></div>
+        <div>image.x: <th:block th:text="${iconX}"/> e image.y: <th:block th:text="${iconY}"/></div>
         <br/>
 
         <input type="button" value="Dejar formulario en blanco" onclick="clearAll()"/>

@@ -1,0 +1,53 @@
+/*
+    index.html and index-advanced.html styles
+*/
+
+body { background-color: beige; }
+
+    form {
+        display: flex;
+        justify-content: center;
+    }
+
+        legend {
+            font-size: 1.5em;
+            font-family: monospace;
+        }
+
+        fieldset {
+            width: 40%;
+            background-color: #f2f4f3;
+            border-radius: 2%;
+            display: grid;
+            grid-template-columns: 45% 50% 0.1%;
+            grid-row-gap: .6%;
+        }
+
+            label {
+                /*border: 2px solid black;*/
+                font-family: Arial, serif;
+                text-align: right;
+                padding-right: 3%;
+            }
+
+            label[for="license"] { text-align: left; }
+
+            div {
+                /*border: 1px solid red;*/
+                display: flex;
+                justify-content: center;
+            }
+
+            .box { background-color: rgba(208, 0, 0, 0.57); }
+
+            #document { color: #1e1014; }
+
+            .expand {
+                grid-column-start: 1;
+                grid-column-end: 3;
+            }
+
+            input[type="button"], input[type="reset"], input[type="submit"] {
+                background-color: #4c6085;
+                color: white;
+            }
